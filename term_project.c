@@ -8,7 +8,7 @@
 
 int avg_TAT[6];
 int avg_WT[6];
-
+ 
 
 //process 구조체 선언
 typedef struct {
@@ -458,11 +458,10 @@ void SRJF(Queue job){
 
     //현재 실행중인 프로세스 인덱스 번호 초기화 (이후 Gantt Chart 그릴 때 만약 같은 프로세스가 계속 사용하고 있다면 끊지 않고 공백 삽입해 이어지게 만듬)
     int current_index = -1;
-    int io_init = 1;
 
     while (finished_process < QUEUE_SIZE) {
         // 우선순위 변수 초기화 (초기 값이므로 최대한 크게 설정)
-        int cpu_burst = 100000000;
+        int cpu_burst = 1e9;
         //우선순위 프로세스의 인덱스 번호 초기화
         int cpu_burst_index = -1;
 
@@ -739,20 +738,14 @@ int main() {
     
     //cputime , iotime , arrivaltime, priority
     
-    enqueue(&Queue, Create_Process(3,6,7,5));
-    enqueue(&Queue, Create_Process(3,5,6,2));
-    enqueue(&Queue, Create_Process(9,1,2,7));
-    enqueue(&Queue, Create_Process(2,9,3,6));
-    enqueue(&Queue, Create_Process(4,6,2,6));
-    enqueue(&Queue, Create_Process(1,8,7,9));
-    enqueue(&Queue, Create_Process(2,0,2,3));
-    enqueue(&Queue, Create_Process(7,5,9,2));
-    enqueue(&Queue, Create_Process(2,8,9,7));
-    enqueue(&Queue, Create_Process(3,6,1,2));
-
-
-    
-    
+    for(int i=0; i<QUEUE_SIZE;i++){    
+        int list[3];
+            for (int j=0; j<4; j++){
+                int a = rand()%10;
+                list[j]=a;      
+            }
+        enqueue(&Queue, Create_Process(list[0],list[1],list[2],list[3]));
+    }
 
     for(int i=0;i<QUEUE_SIZE;i++){
         printf("P%d : CPU:%d , IO:%d, ARR:%d, PRI:%d \n", Queue.process_items[i].pid , Queue.process_items[i].cpu_burst_time , Queue.process_items[i].io_burst_time, Queue.process_items[i].arrival_time, Queue.process_items[i].priority);
@@ -765,5 +758,4 @@ int main() {
     Preemptive_pri(Queue);
     RR(Queue);
         
-
 }
